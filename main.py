@@ -6,9 +6,10 @@ import tests
 def main():
 
     # Our tests in tests.py
-    tests.run_tests()
-
-    game = Game()
+    #tests.run_tests()
+    p1 = Player(1)
+    p2 = Player(2)
+    game = Game(p1, p2)
     gui = GUI(game)
 
 

@@ -3,7 +3,9 @@ from luffarschack import *
 
 def run_tests():
 
-    test = Game()
+    player1 = Player(1)
+    player2 = Player(2)
+    test = Game(player1, player2)
 
     # Left upper diagonal test
     test.move(0, 0)

@@ -5,7 +5,7 @@ from luffarschack import *
 class GUI:
     def __init__(self, game):
 
-        board = [[0 for j in range(game.board_size)] for i in range(game.board_size)]
+        board = game.board
 
         layout = [[sg.Button('', size=(4, 2), key=(i, j), pad=(0, 0)) for j in range(game.board_size)] for i in
                   range(game.board_size)]
@@ -16,7 +16,13 @@ class GUI:
             event, values = window.read()
             if event in (sg.WIN_CLOSED, 'Exit'):
                 break
-            # window[(row, col)].update('New text')   # To change a button's text, use this pattern
-            # For this example, change the text of the button to the board's value and turn color black
-            window[event].update(board[event[0]][event[1]], button_color=('white', 'black'))
+
+            # i = event[0] and j = event[j]
+            if game.legal_move(event[0], event[1]):
+                window[event].update(game.player_turn, button_color=('white', 'black'))
+            game.move(event[0], event[1])
+
+            if game.check_win(event)[1]:
+                print(game.check_win()[0])
+
         window.close()
