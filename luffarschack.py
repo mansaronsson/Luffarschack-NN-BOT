@@ -16,11 +16,10 @@ class Game:
         self.player_turn = self.player1.id  # Changes every move
         self.last_turn = self.player1
 
-        
     def move(self, row, col):
         if self.legal_move(row, col):
             self.board[row][col] = self.player_turn
-            self.last_turn = self.player_turn
+            self.last_turn = self.board[row][col]
             self.player_turn = self.player1.id if (self.player_turn == self.player2.id) else self.player2.id
             return True
 
@@ -80,73 +79,64 @@ class Game:
         else:
             return 0, True
 
-
     def clear_board(self):
         self.board.fill(0)
         self.player_turn = -1
 
     def check_win(self, move):
         numbers_in_row = 0
+        numbers_in_col = 0
+        numbers_in_diagonal_ud = 0
+        numbers_in_diagonal_du = 0
 
 # check row of placement
         for row in range(self.board_size):
             if self.board[row][move[1]] == self.last_turn:
                 numbers_in_row += 1
+                if numbers_in_row == 5:
+                    return self.last_turn, True
             else:
                 numbers_in_row = 0
-
-        if numbers_in_row == 5:
-            return self.last_turn, True
-        else:
-            numbers_in_row = 0
 
 # check col of placement
         for col in range(self.board_size):
             if self.board[move[0]][col] == self.last_turn:
-                numbers_in_row += 1
+                numbers_in_col += 1
+                if numbers_in_col == 5:
+                    return self.last_turn, True
             else:
-                numbers_in_row = 0
+                numbers_in_col = 0
 
-        if numbers_in_row == 5:
-            return self.last_turn, True
-        else:
-            numbers_in_row = 0
 
 # diagonal of placement top left to bottom right
 
         for i in range(-4, 4):
             if move[0]+i < 0 or move[1]+i < 0:
                 continue
-
-            if (move[0] + i) == self.board_size or (move[1] + i) == self.board_size:
+            elif (move[0] + i) == self.board_size or (move[1] + i) == self.board_size:
                 break
 
             if self.board[move[0]+i][move[1]+i] == self.last_turn:
-                numbers_in_row += 1
+                numbers_in_diagonal_ud += 1
+                if numbers_in_diagonal_ud == 5:
+                    return self.last_turn, True
             else:
-                numbers_in_row = 0
-
-        if numbers_in_row == 5:
-            return self.last_turn, True
-        else:
-            numbers_in_row = 0
+                numbers_in_diagonal_ud = 0
 
 # diagonal low right to top left
         for i in range(-4, 4):
-            if move[0]+i < 0 or move[1]-i < 0:
+            print(move[0]-i, " and ", move[1]+i)
+            if move[0]-i < 0 or move[1]+i < 0:
                 continue
-            if move[0]+i >= self.board_size or move[1]-i >= self.board_size:
+            if move[0]-i >= self.board_size or move[1]+i >= self.board_size:
                 continue
 
-            if self.board[move[0]+i][move[1]-i] == self.last_turn:
-                numbers_in_row += 1
+            if self.board[move[0]-i][move[1]+i] == self.last_turn:
+                numbers_in_diagonal_du += 1
+                if numbers_in_diagonal_du == 5:
+                    return self.last_turn, True
             else:
-                numbers_in_row = 0
-
-        if numbers_in_row == 5:
-            return self.last_turn, True
-        else:
-            numbers_in_row = 0
+                numbers_in_diagonal_du = 0
 
         return 0, False
 

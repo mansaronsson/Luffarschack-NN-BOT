@@ -23,6 +23,6 @@ class GUI:
             game.move(event[0], event[1])
 
             if game.check_win(event)[1]:
-                print(game.check_win()[0])
+                print("we have a winner", game.check_win(event)[0])
 
         window.close()
