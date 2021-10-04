@@ -21,10 +21,21 @@ class Game:
             self.board[row][col] = self.player_turn
             self.last_turn = self.board[row][col]
             self.player_turn = self.player1.id if (self.player_turn == self.player2.id) else self.player2.id
+
             return True
 
         return False
-    
+
+# returns all possible moves ass a list
+    def available_moves(self):
+        all_moves = ([])
+        for i in range(self.board_size):
+            for j in range(self.board_size):
+                if self.legal_move(i, j):
+                    all_moves.append([i, j])
+
+        return all_moves
+
     def legal_move(self, row, col) -> bool:
         # Checks so move is within board boundary
         if -1 < row < self.board_size and -1 < col < self.board_size:
@@ -125,7 +136,6 @@ class Game:
 
 # diagonal low right to top left
         for i in range(-4, 4):
-            print(move[0]-i, " and ", move[1]+i)
             if move[0]-i < 0 or move[1]+i < 0:
                 continue
             if move[0]-i >= self.board_size or move[1]+i >= self.board_size:
@@ -139,11 +149,3 @@ class Game:
                 numbers_in_diagonal_du = 0
 
         return 0, False
-
-# diagonal right to left
-
-#       for col in range(self.board_size):
-#          if self.board[col][col] == self.last_turn:
-#             numbers_in_row += 1
-#        else:
-#           numbers_in_row = 0
