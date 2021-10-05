@@ -20,8 +20,6 @@ class GUI:
             if event in (sg.WIN_CLOSED, 'Exit'):
                 break
 
-            # i = event[0] and j = event[j]
-
             if game.legal_move(event[0], event[1]):
                 window[event].update(game.player_turn, button_color=('white', 'black'))
             game.move(event[0], event[1])
@@ -33,3 +31,7 @@ class GUI:
                 break
 
         window.close()
+
+# continue to fix
+    def make_a_move(self, move, game):
+        self.window[move].update(game.player_turn, button_color=('white', 'black'))

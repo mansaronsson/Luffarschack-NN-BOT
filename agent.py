@@ -6,8 +6,8 @@ import numpy as np
 
 class Agent:
 
-    def __init__(self, id):
-        self.id = id
+    def __init__(self, name):
+        self.id = name
         self.points = 0
 
     # make a random action based on the existing actions
@@ -19,4 +19,5 @@ class Agent:
             move = (possible_moves[i][0], possible_moves[i][1])
             print(move, " by ", self.id)  # for debugging reasons
             env.move(move[0], move[1])
+
         return move
