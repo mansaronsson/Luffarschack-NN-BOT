@@ -1,5 +1,7 @@
 # Adapted from https://mblogscode.com/2016/06/03/python-naughts-crossestic-tac-toe-coding-unbeatable-ai/
+
 import random
+
 
 import gym
 import numpy as np
@@ -35,10 +37,9 @@ class LuffarschackEnv(gym.Env):
         self.n_players = 2
         self.num_squares = self.grid_length * self.grid_length
         self.grid_shape = (self.grid_length, self.grid_length)
-#        logger.debug('grid shape: ', self.grid_shape)
         self.action_space = gym.spaces.Discrete(self.num_squares)
         self.observation_space = gym.spaces.Box(-1, 1, self.grid_shape+(2,))
-#        logger.debug('obs space: ', self.observation_space)
+
         self.verbose = verbose
         
 
@@ -49,7 +50,6 @@ class LuffarschackEnv(gym.Env):
         else:
             position = np.array([-x.number for x in self.board]).reshape(self.grid_shape)
 
-        #logger.debug('Position: ', position)
         la_grid = np.array(self.legal_actions).reshape(self.grid_shape)
         out = np.stack([position,la_grid], axis = -1)
         return out
@@ -180,6 +180,7 @@ class LuffarschackEnv(gym.Env):
         # logger.debug(' '.join([x.symbol for x in self.board[self.grid_length:self.grid_length*2]]))
         # logger.debug(' '.join([x.symbol for x in self.board[(self.grid_length*2):(self.grid_length*3)]]))
 
+
         if self.verbose:
             logger.debug(f'\nObservation: \n{self.observation}')
         
@@ -260,6 +261,7 @@ def checkWin(b, m):
             (b[2] == m and b[5] == m and b[8] == m) or  # V right
             (b[0] == m and b[4] == m and b[8] == m) or  # LR diag
             (b[2] == m and b[4] == m and b[6] == m))  # RL diag
+
 
 
 # def checkDraw(b):
