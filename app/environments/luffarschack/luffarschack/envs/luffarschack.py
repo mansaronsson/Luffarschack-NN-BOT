@@ -34,7 +34,7 @@ class LuffarschackEnv(gym.Env):
         self.name = 'luffarschack'
         self.manual = manual
         
-        self.grid_length = 19
+        self.grid_length = 9
         self.n_players = 2
         self.num_squares = self.grid_length * self.grid_length
         self.grid_shape = (self.grid_length, self.grid_length)
@@ -151,7 +151,7 @@ class LuffarschackEnv(gym.Env):
 
     def step(self, action):
         
-        reward = [0,0]
+        reward = [0, 0]
         
         # check move legality
         board = self.board
@@ -164,15 +164,41 @@ class LuffarschackEnv(gym.Env):
             board[action] = self.current_player.token
             self.turns_taken += 1
             r, done = self.check_game_over()
-            reward = [-r, -r]
+            reward = [-r*2, -r*2]
             reward[self.current_player_num] = r
 
         self.done = done
 
         if not done:
+            friends_in_area = self.check_surroundings(3, self.current_player_num, action)
+            enemies_adjacent = self.check_surroundings(1, (self.current_player_num + 1) % 2, action)
+            friends_adjacent = self.check_surroundings(1, self.current_player_num, action)
+    
+            reward[self.current_player_num] += 0.01 * friends_in_area
+            reward[self.current_player_num] += 0.02 * enemies_adjacent
+            reward[self.current_player_num] += 0.03 * friends_adjacent
+    
+            if not self.turns_taken == 1 and not friends_in_area and not enemies_adjacent:
+                reward[self.current_player_num] -= 0.02
+
+            logger.debug("Rewards: ", reward)
+            
             self.current_player_num = (self.current_player_num + 1) % 2
 
         return self.observation, reward, done, {}
+
+    def check_surroundings(self, search_rad, player_num, action):
+        x0 = action % self.grid_length
+        y0 = action // self.grid_length
+        
+        counter = 0
+        for i in range(self.grid_length):
+            for j in range(self.grid_length):
+                if self.square_is_player(i * self.grid_length + j, player_num):
+                    if 0 < abs(x0 - j) + abs(y0 - i) <= search_rad:
+                        counter += 1
+    
+        return counter
 
     def reset(self):
         self.board = [Token('.', 0)] * self.num_squares
@@ -201,6 +227,7 @@ class LuffarschackEnv(gym.Env):
         for i in range(self.grid_length-1):
             logger.debug(' '.join([x.symbol for x in self.board[i*self.grid_length:self.grid_length*(i+1)]]))
 
+<<<<<<< HEAD
         # logger.debug(' '.join([x.symbol for x in self.board[:self.grid_length]]))
         # logger.debug(' '.join([x.symbol for x in self.board[self.grid_length:self.grid_length*2]]))
         # logger.debug(' '.join([x.symbol for x in self.board[(self.grid_length*2):(self.grid_length*3)]]))
@@ -211,6 +238,8 @@ class LuffarschackEnv(gym.Env):
         logger.debug(' '.join([x.symbol for x in self.board[(self.grid_length*2):(self.grid_length*3)]]))
 >>>>>>> 8b953de (Added SIMPLE branch)
 
+=======
+>>>>>>> 66e5843 (Changed board to 9by9 and modified rewards)
         if self.verbose:
             logger.debug(f'\nObservation: \n{self.observation}')
         
@@ -227,7 +256,7 @@ class LuffarschackEnv(gym.Env):
 <<<<<<< HEAD
         #logger.debug('b: ', b)
 
-        return self.create_action_probs(random.randint(0, 360))
+        return self.create_action_probs(random.randint(0, 80))
 
 
         # Check computer win moves

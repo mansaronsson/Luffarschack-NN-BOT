@@ -46,10 +46,15 @@ def value_head(y):
     y = Flatten()(y)
     vf = dense(y, 1, batch_norm = False, activation = 'tanh', name='vf')
 <<<<<<< HEAD
+<<<<<<< HEAD
     q = dense(y, 361, batch_norm = False, activation = 'tanh', name='q')
 =======
     q = dense(y, 9, batch_norm = False, activation = 'tanh', name='q')
 >>>>>>> 8b953de (Added SIMPLE branch)
+=======
+    q = dense(y, 81, batch_norm = False, activation = 'tanh', name='q')
+
+>>>>>>> 66e5843 (Changed board to 9by9 and modified rewards)
     return vf, q
 
 
@@ -57,10 +62,15 @@ def policy_head(y):
     y = convolutional(y, 4, 1)
     y = Flatten()(y)
 <<<<<<< HEAD
+<<<<<<< HEAD
     policy = dense(y, 361, batch_norm = False, activation = None, name='pi')
 =======
     policy = dense(y, 9, batch_norm = False, activation = None, name='pi')
 >>>>>>> 8b953de (Added SIMPLE branch)
+=======
+    policy = dense(y, 81, batch_norm = False, activation = None, name='pi')
+
+>>>>>>> 66e5843 (Changed board to 9by9 and modified rewards)
     return policy
 
 
