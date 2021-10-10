@@ -44,7 +44,7 @@ class CustomPolicy(ActorCriticPolicy):
 def value_head(y):
     y = convolutional(y, 4, 1)
     y = Flatten()(y)
-    y = dense(y, 19, batch_norm=False)
+    y = dense(y, 9, batch_norm=False)
     vf = dense(y, 1, batch_norm = False, activation = 'tanh', name='vf')
     q = dense(y, 81, batch_norm = False, activation = 'tanh', name='q')
 

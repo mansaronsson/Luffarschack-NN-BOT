@@ -40,9 +40,6 @@ class Agent():
 
   def choose_action(self, env, choose_best_action, mask_invalid_actions):
 
-#      logger.debug('env rules moves: ', np.array(env.rules_move()))
-      #logger.debug('ac_prob(env obs) obs: ', self.model.action_probability(env.observation))
-      #logger.debug('env obs: ', env.observation)
       if self.name == 'rules':
 
         action_probs = np.array(env.rules_move())

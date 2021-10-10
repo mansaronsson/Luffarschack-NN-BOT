@@ -150,15 +150,21 @@ class LuffarschackEnv(gym.Env):
         self.done = done
 
         if not done:
+
             friends_in_area = self.check_surroundings(3, self.current_player_num, action)
-            enemies_adjacent = self.check_surroundings(1, (self.current_player_num + 1) % 2, action)
-            friends_adjacent = self.check_surroundings(1, self.current_player_num, action)
+#            enemies_adjacent = self.check_surroundings(1, (self.current_player_num + 1) % 2, action)
+#            friends_adjacent = self.check_surroundings(1, self.current_player_num, action)
     
-            reward[self.current_player_num] += 0.01 * friends_in_area
-            reward[self.current_player_num] += 0.02 * enemies_adjacent
-            reward[self.current_player_num] += 0.03 * friends_adjacent
+            reward[self.current_player_num] += 0.001 * friends_in_area
+#            reward[self.current_player_num] += 0.02 * enemies_adjacent
+#            reward[self.current_player_num] += 0.03 * friends_adjacent
+            reward[self.current_player_num] += 0.01 * (self.in_a_row(action)-1)
+            reward[self.current_player_num] += 0.01 * (self.in_a_col(action)-1)
+            reward[self.current_player_num] += 0.01 * (self.in_a_diagonal(action)-1)
+            reward[self.current_player_num] += 0.01 * (self.in_an_other_diagonal(action)-1)
+
     
-            if not self.turns_taken == 1 and not friends_in_area and not enemies_adjacent:
+            if not self.turns_taken == 1 and not friends_in_area: # and not enemies_adjacent:
                 reward[self.current_player_num] -= 0.02
 
             logger.debug("Rewards: ", reward)
@@ -180,6 +186,116 @@ class LuffarschackEnv(gym.Env):
     
         return counter
 
+
+#   check on the same row -> loop over columns
+    def in_a_row(self, action):
+        #columns
+        x0 = action % self.grid_length
+        #rows
+        y0 = action // self.grid_length
+
+        counter = 0
+        passed_x0 = False
+
+        for i in range(x0-4, x0+5):
+            if not i // self.grid_length == x0 // self.grid_length:
+                continue
+
+            if i > x0:
+                passed_x0 = True
+
+            if self.square_is_player(y0*self.grid_length + i, self.current_player_num):
+                counter += 1
+            elif passed_x0:
+                break
+            else:
+                counter = 0
+
+        return counter
+
+    def in_a_col(self, action):
+        #columns
+        x0 = action % self.grid_length
+        #rows
+        y0 = action // self.grid_length
+
+        counter = 0
+        passed_y0 = False
+
+        for i in range(y0-4, y0+5):
+            if i < 0:
+                continue
+            if i > 8:
+                break
+
+            if i > y0:
+                passed_y0 = True
+
+            if self.square_is_player(i*self.grid_length + x0, self.current_player_num):
+                counter += 1
+            elif passed_y0:
+                break
+            else:
+                counter = 0
+
+        return counter
+
+# diagonal \
+    def in_a_diagonal(self, action):
+        #columns
+        x0 = action % self.grid_length
+        #rows
+        y0 = action // self.grid_length
+
+        counter = 0
+        passed_action = False
+
+        for i in range(-4, 5):
+            if (x0 + i) >= self.grid_length or (y0 + i) >= self.grid_length:
+                break
+            if (x0 + i) < 0 or (y0 + i) < 0:
+                continue
+
+            if i > 0:
+                passed_action = True
+
+            if self.square_is_player((y0 + i) * self.grid_length + x0 + i, self.current_player_num):
+                counter += 1
+            elif passed_action:
+                break
+            else:
+                counter = 0
+
+        return counter
+
+# diagonal /
+    def in_an_other_diagonal(self, action):
+        # columns
+        x0 = action % self.grid_length
+        # rows
+        y0 = action // self.grid_length
+
+        counter = 0
+        passed_action = False
+
+        for i in range(-4, 5):
+            if (x0 - i) >= self.grid_length or (y0 + i) < 0:
+                continue
+            if (x0 - i) < 0 or (y0 + i) >= self.grid_length:
+                break
+
+            if i > 0:
+                passed_action = True
+
+            if self.square_is_player((y0 + i) * self.grid_length + x0 - i, self.current_player_num):
+                counter += 1
+            elif passed_action:
+                break
+            else:
+                counter = 0
+
+        return counter
+
     def reset(self):
         self.board = [Token('.', 0)] * self.num_squares
         self.players = [Player('1', Token('X', 1)), Player('2', Token('O', -1))]
@@ -199,7 +315,7 @@ class LuffarschackEnv(gym.Env):
         else:
             logger.debug(f"It is Player {self.current_player.id}'s turn to move")
 
-        for i in range(self.grid_length-1):
+        for i in range(self.grid_length):
             logger.debug(' '.join([x.symbol for x in self.board[i*self.grid_length:self.grid_length*(i+1)]]))
 
         if self.verbose:
