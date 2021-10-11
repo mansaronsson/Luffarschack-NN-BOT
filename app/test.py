@@ -89,7 +89,9 @@ def main(args):
         action = ppo_agent.choose_action(env, choose_best_action = True, mask_invalid_actions = True)
 
       if current_player.name == 'human':
-        action = input('\nPlease choose an action: ')
+        inp = input('\nChoose an action: ')
+        t = tuple(int(x) for x in inp.split())
+        action = t[0]*9+t[1]
         try:
           # for int actions
           action = int(action)

@@ -36,7 +36,7 @@ class Agent():
   def print_top_actions(self, action_probs):
     top5_action_idx = np.argsort(-action_probs)[:5]
     top5_actions = action_probs[top5_action_idx]
-    logger.debug(f"Top 5 actions: {[str(i) + ': ' + str(round(a,2))[:5] for i,a in zip(top5_action_idx, top5_actions)]}")
+    # logger.debug(f"Top 5 actions: {[str(i) + ': ' + str(round(a,2))[:5] for i,a in zip(top5_action_idx, top5_actions)]}")
 
   def choose_action(self, env, choose_best_action, mask_invalid_actions):
 
@@ -48,22 +48,22 @@ class Agent():
 
         action_probs = self.model.action_probability(env.observation)
         value = self.model.policy_pi.value(np.array([env.observation]))[0]
-        logger.debug(f'Value {value:.2f}')
+        #logger.debug(f'Value {value:.2f}')
 
 
       self.print_top_actions(action_probs)
       
       if mask_invalid_actions:
         action_probs = mask_actions(env.legal_actions, action_probs)
-        logger.debug('Masked ->')
+        #logger.debug('Masked ->')
         self.print_top_actions(action_probs)
         
       action = np.argmax(action_probs)
-      logger.debug(f'Best action {action}')
+      #logger.debug(f'Best action {action}')
 
       if not choose_best_action:
           action = sample_action(action_probs)
-          logger.debug(f'Sampled action {action} chosen')
+          #logger.debug(f'Sampled action {action} chosen')
 
       return action
 

@@ -152,12 +152,12 @@ class LuffarschackEnv(gym.Env):
         if not done:
 
             friends_in_area = self.check_surroundings(3, self.current_player_num, action)
-#            enemies_adjacent = self.check_surroundings(1, (self.current_player_num + 1) % 2, action)
-#            friends_adjacent = self.check_surroundings(1, self.current_player_num, action)
+            enemies_adjacent = self.check_surroundings(1, (self.current_player_num + 1) % 2, action)
+            #friends_adjacent = self.check_surroundings(1, self.current_player_num, action)
     
-            reward[self.current_player_num] += 0.001 * friends_in_area
-#            reward[self.current_player_num] += 0.02 * enemies_adjacent
-#            reward[self.current_player_num] += 0.03 * friends_adjacent
+            reward[self.current_player_num] += 0.005 * friends_in_area
+            reward[self.current_player_num] += 0.01 * enemies_adjacent
+            #reward[self.current_player_num] += 0.015 * friends_adjacent
             reward[self.current_player_num] += 0.01 * (self.in_a_row(action)-1)
             reward[self.current_player_num] += 0.01 * (self.in_a_col(action)-1)
             reward[self.current_player_num] += 0.01 * (self.in_a_diagonal(action)-1)
@@ -167,7 +167,7 @@ class LuffarschackEnv(gym.Env):
             if not self.turns_taken == 1 and not friends_in_area: # and not enemies_adjacent:
                 reward[self.current_player_num] -= 0.02
 
-            logger.debug("Rewards: ", reward)
+            #logger.debug("Rewards: ", reward)
             
             self.current_player_num = (self.current_player_num + 1) % 2
 
@@ -312,17 +312,18 @@ class LuffarschackEnv(gym.Env):
             return
         if self.done:
             logger.debug(f'GAME OVER')
-        else:
-            logger.debug(f"It is Player {self.current_player.id}'s turn to move")
+        #else:
+            #logger.debug(f"It is Player {self.current_player.id}'s turn to move")
 
+        logger.debug("  0 1 2 3 4 5 6 7 8")
         for i in range(self.grid_length):
-            logger.debug(' '.join([x.symbol for x in self.board[i*self.grid_length:self.grid_length*(i+1)]]))
+            logger.debug(i, ' '.join([x.symbol for x in self.board[i*self.grid_length:self.grid_length*(i+1)]]))
 
         if self.verbose:
             logger.debug(f'\nObservation: \n{self.observation}')
         
-        if not self.done:
-            logger.debug(f'\nLegal actions: {[i for i,o in enumerate(self.legal_actions) if o != 0]}')
+        #if not self.done:
+            #logger.debug(f'\nLegal actions: {[i for i,o in enumerate(self.legal_actions) if o != 0]}')
 
 
     def rules_move(self):
