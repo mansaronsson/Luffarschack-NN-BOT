@@ -41,9 +41,13 @@ class Agent():
 
   def choose_action(self, env, choose_best_action, mask_invalid_actions):
 <<<<<<< HEAD
+<<<<<<< HEAD
 #      logger.debug('env rules moves: ', np.array(env.rules_move()))
       #logger.debug('ac_prob(env obs) obs: ', self.model.action_probability(env.observation))
       #logger.debug('env obs: ', env.observation)
+=======
+
+>>>>>>> c4116c2 (modified the reward function to focus on placing markers in a row)
       if self.name == 'rules':
 
         action_probs = np.array(env.rules_move())
