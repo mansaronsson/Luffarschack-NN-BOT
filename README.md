@@ -1,3 +1,9 @@
+# Luffarschack BOT 🤖
+
+This is just a continuation of the **SIMPLE** project for implementing game AI using recursive learning with self-play, see below. A new game environment and NN model was successfully developed, and a BOT was trained to work within the excisting project framework.
+
+---
+
 <!-- PROJECT SHIELDS -->
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
