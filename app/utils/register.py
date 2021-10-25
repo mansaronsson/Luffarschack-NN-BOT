@@ -22,7 +22,10 @@ def get_environment(env_name):
             return FlammeRougeEnv
         elif env_name in ('luffarschack'):
             from luffarschack.envs.luffarschack import LuffarschackEnv
+<<<<<<< HEAD
             return LuffarschackEnv
+=======
+>>>>>>> 8b953de (Added SIMPLE branch)
         else:
             raise Exception(f'No environment found for {env_name}')
     except SyntaxError as e:

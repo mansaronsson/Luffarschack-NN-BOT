@@ -36,7 +36,10 @@ class TicTacToeEnv(gym.Env):
         self.grid_shape = (self.grid_length, self.grid_length)
         self.action_space = gym.spaces.Discrete(self.num_squares)
         self.observation_space = gym.spaces.Box(-1, 1, self.grid_shape+(2,))
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8b953de (Added SIMPLE branch)
         self.verbose = verbose
         
 

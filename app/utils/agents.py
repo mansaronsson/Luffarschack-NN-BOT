@@ -14,8 +14,11 @@ def sample_action(action_probs):
 
 
 def mask_actions(legal_actions, action_probs):
+<<<<<<< HEAD
     #logger.debug('legal_actions: ', legal_actions)
     #logger.debug('action_probs: ', action_probs)
+=======
+>>>>>>> 8b953de (Added SIMPLE branch)
     masked_action_probs = np.multiply(legal_actions, action_probs)
     masked_action_probs = masked_action_probs / np.sum(masked_action_probs)
     return masked_action_probs
@@ -37,6 +40,7 @@ class Agent():
     logger.debug(f"Top 5 actions: {[str(i) + ': ' + str(round(a,2))[:5] for i,a in zip(top5_action_idx, top5_actions)]}")
 
   def choose_action(self, env, choose_best_action, mask_invalid_actions):
+<<<<<<< HEAD
 #      logger.debug('env rules moves: ', np.array(env.rules_move()))
       #logger.debug('ac_prob(env obs) obs: ', self.model.action_probability(env.observation))
       #logger.debug('env obs: ', env.observation)
@@ -46,11 +50,20 @@ class Agent():
         value = None
       else:
 
+=======
+      if self.name == 'rules':
+        action_probs = np.array(env.rules_move())
+        value = None
+      else:
+>>>>>>> 8b953de (Added SIMPLE branch)
         action_probs = self.model.action_probability(env.observation)
         value = self.model.policy_pi.value(np.array([env.observation]))[0]
         logger.debug(f'Value {value:.2f}')
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8b953de (Added SIMPLE branch)
       self.print_top_actions(action_probs)
       
       if mask_invalid_actions:

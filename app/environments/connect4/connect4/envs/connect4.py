@@ -42,7 +42,11 @@ class Connect4Env(gym.Env):
     @property
     def observation(self):
         if self.current_player.token.number == 1:
+<<<<<<< HEAD
             position_1 = np.array([1 if x.number == 1 else 0 for x in self.board]).reshape(self.grid_shape)
+=======
+            position_1 = np.array([1 if x.number == 1 else 0  for x in self.board]).reshape(self.grid_shape)
+>>>>>>> 8b953de (Added SIMPLE branch)
             position_2 = np.array([1 if x.number == -1 else 0 for x in self.board]).reshape(self.grid_shape)
             position_3 = np.array([self.can_be_placed(i) for i,x in enumerate(self.board)]).reshape(self.grid_shape)
         else:
